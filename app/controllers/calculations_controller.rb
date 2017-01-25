@@ -11,13 +11,20 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.count(" ") - @text.count("\r") - @text.count("\n")
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split.size
 
-    @occurrences = "Replace this string with your answer."
+    words = @text.split
+    frequency = Hash.new(0)
+    words.each do |word|
+      frequency[word.downcase] = frequency[word.downcase]+1
+    end
+
+    @special_word.downcase
+    @occurrences = frequency[@special_word.downcase]
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +45,9 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    r = @apr*0.01/12
+    months = @years*12
+    @monthly_payment = (@principal*(r*(1+r)**months)/((1+r)**months-1))
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +69,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending-@starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
 
     # ================================================================================
     # Your code goes above.
@@ -82,27 +91,51 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max-@numbers.min
 
-    @median = "Replace this string with your answer."
+    if @sorted_numbers.count % 2==1
+      then @median = @sorted_numbers[@sorted_numbers.count/2]
+    else @median = (@sorted_numbers[@sorted_numbers.count/2]+@sorted_numbers[@sorted_numbers.count/2-1])/2
+    end
 
-    @sum = "Replace this string with your answer."
+    total = 0
+    @numbers.each do |num|
+      total = num + total
+    end
+    @sum = total
 
-    @mean = "Replace this string with your answer."
+    @mean = @sum/@count
 
-    @variance = "Replace this string with your answer."
+    total = 0
+    @numbers.each do |num|
+      total = (num-@mean)**2+total
+    end
 
-    @standard_deviation = "Replace this string with your answer."
+    @variance = total/(@count)
 
-    @mode = "Replace this string with your answer."
+    @standard_deviation = @variance**0.5
+
+
+    frequency = Hash.new(0)
+    @numbers.each do |num|
+      frequency[num] = frequency[num]+1
+    end
+
+    max_freq = -1
+    @numbers.each do |num|
+      if max_freq<frequency[num]
+        max_freq=frequency[num]
+        @mode = num
+      end
+    end
 
     # ================================================================================
     # Your code goes above.
